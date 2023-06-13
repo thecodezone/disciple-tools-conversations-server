@@ -1,6 +1,19 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Service Drivers
+    |--------------------------------------------------------------------------
+    |
+    | The available service drivers like Facebook Page, Facebook Messenger, etc.
+    | New drivers need service classes that implement the Service interface.
+
+    */
+    'drivers' => [
+        'facebook_page' => \App\Services\FacebookPage::class,
+        'facebook_messenger' => \App\Services\FacebookMessenger::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -13,7 +26,6 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
-
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
@@ -31,4 +43,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'slack' => [
+        'error_webhook_url' => env('SLACK_ERROR_URL'),
+        'error_channel' => env('SLACK_ERROR_CHANNEL'),
+    ],
 ];

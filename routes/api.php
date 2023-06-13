@@ -13,7 +13,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::middleware('auth:sanctum')
+    ->prefix('v1')
+    ->name('api.')
+    ->group(function () {
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+        Route::resource('instances.services', \App\Http\Controllers\ServiceController::class)
+             ->only(['index', 'store', 'destroy']);
+
+    });
