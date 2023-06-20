@@ -109,10 +109,12 @@ return [
     |--------------------------------------------------------------------------
     | Enable sanctum api token management.
     */
-    "enable_sanctum" => false,
+    "enable_sanctum" => true,
     /*
     |--------------------------------------------------------------------------
     | Sanctum permissions
     */
-    "sanctum_permissions" => ["create", "read", "update", "delete"],
+    "sanctum_permissions" => [
+        "services"
+    ],
 ];

@@ -7,12 +7,18 @@ use App\Filament\Resources\InstanceResource\RelationManagers;
 use App\Models\Instance;
 use Filament\Forms;
 use Filament\Resources\Form;
+use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 
 class InstanceResource extends Resource
 {
+    public function reload()
+    {
+        $this->refresh();
+    }
+
     protected static ?string $model = Instance::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
@@ -58,7 +64,11 @@ class InstanceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\UsersRelationManager::class
+            RelationGroup::make('Connections', [
+                RelationManagers\ServicesRelationManager::class,
+                RelationManagers\ChannelsRelationManager::class,
+            ]),
+            RelationManagers\UsersRelationManager::class,
         ];
     }
 

@@ -7,7 +7,9 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use JeffGreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
@@ -88,6 +90,14 @@ class User extends Authenticatable implements FilamentUser, HasName
             Service::class,
             Instance::class
         );
+    }
+
+    /**
+     * Service OAuth Tokens
+     * @return HasMany
+     */
+    public function serviceTokens(): HasMany {
+        return $this->hasMany(ServiceToken::class);
     }
 
     public function getActivitylogOptions(): LogOptions {

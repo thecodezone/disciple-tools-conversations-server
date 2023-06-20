@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Instance;
+use App\Models\ServiceType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,9 +20,8 @@ class ServiceFactory extends Factory
     {
         return [
             'name' => $this->faker->words(2, true),
+            'service_type_id' => ServiceType::inRandomOrder()->first()->id,
             'instance_id' => Instance::count() ? Instance::inRandomOrder()->first()->id : Instance::factory()->create()->id,
-            'access_token' => $this->faker->uuid,
-            'type' => $this->faker->randomElement(array_keys(config('services.drivers')))
         ];
     }
 }

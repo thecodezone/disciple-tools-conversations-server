@@ -13,12 +13,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::middleware('auth:sanctum')
+Route::middleware(['instance', 'auth:sanctum'])
     ->prefix('v1')
     ->name('api.')
     ->group(function () {
 
         Route::resource('instances.services', \App\Http\Controllers\ServiceController::class)
              ->only(['index', 'store', 'destroy']);
+
+        Route::get('webhook/mock', [\App\Http\Controllers\WebhookController::class, 'mock'])
+             ->name('webhook.mock');
 
     });

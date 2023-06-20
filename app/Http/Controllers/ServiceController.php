@@ -56,4 +56,19 @@ class ServiceController extends Controller
             ->noContent()
             ->setStatusCode(204);
     }
+
+    public function oauth(Service $service) {
+        return redirect(route('oauth.redirect', [
+            'service' => $service->type->slug,
+            'returnUrl' => route('services.oauth.callback', $service)
+        ]));
+    }
+
+    public function oauthCallback(Service $service, Request $request) {
+        $tokenId = $request->input('serviceTokenId');
+        $service->service_token_id = $tokenId;
+        $service->save();
+        return redirect(route('filament.resources.instances.edit', $service->instance_id));
+
+    }
 }

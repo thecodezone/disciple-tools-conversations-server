@@ -12,9 +12,6 @@ class ServiceIndexRequest extends FormRequest
     public function authorize(): bool
     {
         $instance = $this->route('instance');
-        if (!$instance) {
-            return false;
-        }
         foreach($instance->services as $service) {
             if ($this->user()->cannot('view', $service)) {
                 return false;

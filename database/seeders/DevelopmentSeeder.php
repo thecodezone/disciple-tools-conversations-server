@@ -12,9 +12,7 @@ class DevelopmentSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            DatabaseSeeder::class,
-            InstanceSeeder::class,
-            ServiceSeeder::class
+            DatabaseSeeder::class
         ]);
     }
 }

@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('instance_id');
-            $table->string('type');
+            $table->foreignId('service_token_id')->nullable();
+            $table->foreignId('service_type_id')->nullable();
+            $table->foreignId('instance_id')->nullable();
             $table->string('name');
-            $table->string('access_token');
+            $table->boolean('connected')->default(false);
             $table->timestamps();
         });
     }

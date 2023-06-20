@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\OAuthSuccess;
+use App\Listeners\SyncFacebookPages;
 use App\Models\Instance;
 use App\Models\Service;
 use App\Observers\InstanceObserver;
@@ -9,6 +11,8 @@ use App\Observers\ServiceObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use SocialiteProviders\Facebook\FacebookExtendSocialite;
+use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,6 +25,10 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        SocialiteWasCalled::class => [
+            FacebookExtendSocialite::class.'@handle',
+        ],
+
     ];
 
     /**

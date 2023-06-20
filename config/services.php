@@ -3,20 +3,6 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Service Drivers
-    |--------------------------------------------------------------------------
-    |
-    | The available service drivers like Facebook Page, Facebook Messenger, etc.
-    | New drivers need service classes that implement the Service interface.
-
-    */
-    'drivers' => [
-        'facebook_page' => \App\Services\FacebookPage::class,
-        'facebook_messenger' => \App\Services\FacebookMessenger::class,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Third Party Services
     |--------------------------------------------------------------------------
     |
@@ -47,4 +33,11 @@ return [
         'error_webhook_url' => env('SLACK_ERROR_URL'),
         'error_channel' => env('SLACK_ERROR_CHANNEL'),
     ],
+
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => trim(env('APP_URL'), '/') . "/oauth/facebook/callback",
+        'scopes' => ['email', 'public_profile'],
+    ]
 ];

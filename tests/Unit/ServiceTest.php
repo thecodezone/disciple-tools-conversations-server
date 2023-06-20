@@ -23,6 +23,6 @@ class ServiceTest extends TestCase
             ]
         );
         $driver = $service->driver();
-        $this->assertInstanceOf(\App\Services\FacebookMessenger::class, $driver);
+        $this->assertInstanceOf(\App\Webhooks\FacebookMessenger::class, $driver);
     }
 }

@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +25,28 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Auth::viaRequest('token', function (Request $request) {
+            $token = false;
+
+            if ($request->has('token')) {
+               $token = $request->input('token');
+            } elseif(session()->get('token')) {
+               $token = session()->get('token');
+            }
+
+            if (!$token) {
+                return null;
+            }
+
+            $token = PersonalAccessToken::findToken($token);
+
+            if (!$token) {
+                return null;
+            }
+
+            $user = $token->tokenable;
+
+            return $user;
+        });
     }
 }
