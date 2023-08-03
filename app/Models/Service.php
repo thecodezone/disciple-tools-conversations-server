@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use App\Webhooks\WebhookDriver;
-use App\Webhooks\WebhookDriverFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Psy\Util\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -36,9 +33,10 @@ class Service extends Model
      * Log options for spatie/activitylog
      *
      * @see https://spatie.be/docs/laravel-activitylog/v4/advanced-usage/logging-model-events
-     * @return LogOptions
+     * @return \Spatie\Activitylog\LogOptions
      */
-    public function getActivitylogOptions(): LogOptions {
+    public function getActivitylogOptions(): LogOptions
+    {
         return LogOptions::defaults()->logOnly(['name', 'access_token', 'type']);
     }
 
@@ -47,8 +45,18 @@ class Service extends Model
         return $this->belongsTo(ServiceToken::class, 'service_token_id', 'id');
     }
 
+    public function serviceToken()
+    {
+        return $this->token();
+    }
+
     public function channels()
     {
         return $this->hasMany(Channel::class);
+    }
+
+    public function serviceType()
+    {
+        return $this->belongsTo(ServiceType::class);
     }
 }

@@ -23,17 +23,21 @@
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-data": "^3.6",
         "spatie/laravel-permission": "^5.10",
+        "spatie/laravel-webhook-client": "^3.1",
         "spatie/url": "^2.2"
     },
     "require-dev": {
         "doctrine/dbal": "^3.6",
         "fakerphp/faker": "^1.9.1",
+        "friendsofphp/php-cs-fixer": "^3.22",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
+        "mreduar/laravel-phpcs": "^1.8",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.1",
-        "spatie/laravel-ignition": "^2.0"
+        "spatie/laravel-ignition": "^2.0",
+        "squizlabs/php_codesniffer": "^3.7"
     },
     "autoload": {
         "psr-4": {
@@ -76,7 +80,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "minimum-stability": "stable",

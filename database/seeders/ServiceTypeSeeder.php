@@ -15,7 +15,7 @@ class ServiceTypeSeeder extends Seeder
     {
         ServiceType::updateOrCreate(
             [
-                'id' => 1,
+                'id' => ServiceType::FACEBOOK,
                 'slug' => 'facebook',
                 'name' => 'Facebook'
             ]

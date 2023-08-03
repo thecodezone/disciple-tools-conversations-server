@@ -2,23 +2,15 @@
 
 namespace App\Filament\Resources\InstanceResource\RelationManagers;
 
-use App\Channels\Channel;
 use App\Models\ChannelType;
-use Filament\Tables\Actions\Action;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Instance;
 use App\Models\Service;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
-use Livewire\Component;
-use Livewire\Livewire;
+use Filament\Tables\Actions\Action;
+use Illuminate\Database\Eloquent\Model;
 
 class ChannelsRelationManager extends RelationManager
 {
@@ -36,33 +28,22 @@ class ChannelsRelationManager extends RelationManager
                     ->maxLength(255),
                 Forms\Components\Select::make('type')
                     ->reactive()
-                   ->relationship('type', 'name')
-                   ->required(),
+                    ->relationship('type', 'label')
+                    ->required(),
                 Forms\Components\Select::make('service')
+                    ->reactive()
                     ->relationship('service', 'name')
                     ->required(),
                 Forms\Components\Repeater::make('settings')
-                    ->hidden(function($get) {
-                        if (!$get('type')) {
-                            return true;
-                        }
-                        $type = ChannelType::find($get('type'));
-                        return count($type->driver()->settingsFields()) < 1;
+                    ->hidden(function ($get) {
+                        return count(self::getSettingsFields($get)) < 1;
                     })
-                    ->required(function($get) {
-                        if (!$get('type')) {
-                            return false;
-                        }
-                        $type = ChannelType::find($get('type'));
-                        return count($type->driver()->settingsFields()) > 0;
+                    ->required(function ($get) {
+                        return count(self::getSettingsFields($get)) > 0;
                     })
-                    ->schema(function($get) {
-                        $type = ChannelType::find($get('type'));
-                        if (!$type) {
-                            return [];
-                        }
-                        return ChannelType::find($get('type'))->driver()->settingsFields();
-                    })
+                    ->schema(function ($get) {
+                        return self::getSettingsFields($get);
+                    }),
             ]);
     }
 
@@ -70,12 +51,6 @@ class ChannelsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\IconColumn::make('connected')
-                                         ->options([
-                                             'heroicon-s-lightning-bolt',
-                                             'heroicon-s-exclamation' => fn ($state, $record): bool => !$record->connected,
-                                             'heroicon-s-lightning-bolt' => fn ($state, $record): bool => $record->connected
-                                         ]),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('type.name'),
                 Tables\Columns\TextColumn::make('service.name'),
@@ -89,16 +64,42 @@ class ChannelsRelationManager extends RelationManager
             ])
             ->actions([
                 Action::make('connect')
-                      ->hidden(fn ($record): bool => !$record->type)
-                      ->url(function (Model $record): string {
-                          return route('services.oauth.redirect', $record->service);
-                      })
-                      ->icon('heroicon-s-lightning-bolt'),
+                    ->hidden(fn ($record): bool => ! $record->type)
+                    ->url(function (Model $record): string {
+                        return route('services.oauth.redirect', $record->service);
+                    })
+                    ->icon('heroicon-s-lightning-bolt'),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    /**
+     * Derive the settings fields from $get
+     *
+     * @param $get
+     * @return array
+     */
+    protected static function getSettingsFields($get): array
+    {
+        $type = $get('type');
+        $service = $get('service');
+
+        if (! $type || ! $service) {
+            return [];
+        }
+
+        $service = Service::find($service);
+
+        if (! $service) {
+            return [];
+        }
+
+        $config = ChannelType::find($type)->config();
+
+        return app($config['settings'])->fields($service);
     }
 }

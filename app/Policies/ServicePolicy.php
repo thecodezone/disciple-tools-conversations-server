@@ -2,19 +2,20 @@
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\Response;
 use App\Models\Service;
 use App\Models\User;
 
 class ServicePolicy
 {
-    private function ownedBy(User $user, Service $service) {
+    private function ownedBy(User $user, Service $service)
+    {
         $instance = $service->instance;
-        if (!$user->instances->contains($instance)) {
+        if (! $user->instances->contains($instance)) {
             return false;
         }
         return true;
     }
+
     /**
      * Determine whether the user can view any models.
      */
@@ -28,7 +29,7 @@ class ServicePolicy
      */
     public function view(User $user, Service $service): bool
     {
-        if (!$this->ownedBy($user, $service)) {
+        if (! $this->ownedBy($user, $service)) {
             return false;
         }
         return $user->can('view Service');
@@ -47,7 +48,7 @@ class ServicePolicy
      */
     public function update(User $user, Service $service): bool
     {
-        if (!$this->ownedBy($user, $service)) {
+        if (! $this->ownedBy($user, $service)) {
             return false;
         }
         return $user->can('update Service');
@@ -58,7 +59,7 @@ class ServicePolicy
      */
     public function delete(User $user, Service $service): bool
     {
-        if (!$this->ownedBy($user, $service)) {
+        if (! $this->ownedBy($user, $service)) {
             return false;
         }
         return $user->can('delete Service');
@@ -69,7 +70,7 @@ class ServicePolicy
      */
     public function restore(User $user, Service $service): bool
     {
-        if (!$this->ownedBy($user, $service)) {
+        if (! $this->ownedBy($user, $service)) {
             return false;
         }
         return $user->can('restore Service');
@@ -80,7 +81,7 @@ class ServicePolicy
      */
     public function forceDelete(User $user, Service $service): bool
     {
-        if (!$this->ownedBy($user, $service)) {
+        if (! $this->ownedBy($user, $service)) {
             return false;
         }
         return $user->can('force-delete Service');

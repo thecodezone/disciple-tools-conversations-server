@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
-use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,18 +28,18 @@ class AuthServiceProvider extends ServiceProvider
             $token = false;
 
             if ($request->has('token')) {
-               $token = $request->input('token');
-            } elseif(session()->get('token')) {
-               $token = session()->get('token');
+                $token = $request->input('token');
+            } elseif (session()->get('token')) {
+                $token = session()->get('token');
             }
 
-            if (!$token) {
+            if (! $token) {
                 return null;
             }
 
             $token = PersonalAccessToken::findToken($token);
 
-            if (!$token) {
+            if (! $token) {
                 return null;
             }
 

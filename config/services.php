@@ -38,6 +38,15 @@ return [
         'client_id' => env('FACEBOOK_CLIENT_ID'),
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect' => trim(env('APP_URL'), '/') . "/oauth/facebook/callback",
-        'scopes' => ['email', 'public_profile'],
+        'scopes' => [
+            'email',
+            'public_profile',
+//            'manage_pages',
+//            'ads_read',
+//            'pages_show_list',
+//            'pages_read_engagement',
+//            'pages_read_user_content',
+//            'pages_messaging'
+        ],
     ]
 ];

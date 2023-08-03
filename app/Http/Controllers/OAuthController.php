@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\OAuthSuccess;
-use App\Models\Instance;
-use App\Models\Service;
 use App\Models\ServiceToken;
-use App\Models\ServiceType;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 use Spatie\Url\Url;
 
@@ -34,37 +28,37 @@ class OAuthController extends Controller
      */
     public function redirect(string $service, Request $request)
     {
-        if (!in_array($service, array_keys(config('services')))) {
+        if (! in_array($service, array_keys(config('services')))) {
             abort(404);
         }
 
         session()->put(self::OAUTH_RETURN_KEY, $request->input('returnUrl', config('app.url')));
 
-        return Socialite::driver( $service )
-                        ->scopes( config("services.$service.scopes", []) )
-                        ->redirect();
+        return Socialite::driver($service)
+            ->scopes(config("services.$service.scopes", []))
+            ->redirect();
     }
 
     /**
      * Handle the OAuth callback
      *
      * @param string $service
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function callback(string $service, Request $request)
     {
-        if (!in_array($service, array_keys(config('services')))) {
+        if (! in_array($service, array_keys(config('services')))) {
             abort(404);
         }
 
         $redirectTo = session()->pull(self::OAUTH_RETURN_KEY, config('app.url'));
-        $socialUser = Socialite::driver( $service )->user();
+        $socialUser = Socialite::driver($service)->user();
         $user = $request->user();
 
-        if (!$socialUser->token || !$user) {
-            abort( 401, 'Unauthorized' );
+        if (! $socialUser->token || ! $user) {
+            abort(401, 'Unauthorized');
         }
 
         $token = ServiceToken::updateOrCreate([

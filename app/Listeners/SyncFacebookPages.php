@@ -3,22 +3,19 @@
 namespace App\Listeners;
 
 use App\Events\OAuthSuccess;
-use App\Models\Service;
 use App\Models\ServiceToken;
-use App\Models\ServiceType;
-use App\Models\User;
-use GuzzleHttp\Client;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Sdks\FacebookSdk;
 
 class SyncFacebookPages
 {
+    protected $facebookSdk;
+
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public function __construct(FacebookSdk $facebookSdk)
     {
-        //
+        $this->facebookSdk = $facebookSdk;
     }
 
     /**
@@ -31,22 +28,13 @@ class SyncFacebookPages
         }
 
         $user = $event->user;
-        $userToken = $user->serviceTokens()->where('service', 'facebook')->first();
+        $serviceToken = $event->serviceToken;
 
-        if (!$userToken) {
+        if (! $serviceToken) {
             abort(401, 'Facebook is not connected.');
         }
 
-        $client = new Client([
-            'base_uri' => 'https://graph.facebook.com/',
-        ]);
-        $response = $client->get($userToken->service_id . '/accounts', [
-            'query' => [
-                'fields' => 'id,name,access_token',
-                'access_token' => $userToken->token,
-            ],
-        ])->getBody()->getContents();
-        $pageTokens = json_decode($response, true);
+        $pageTokens = $this->facebookSdk->getAccounts($serviceToken);
 
         foreach ($pageTokens['data'] as $pageToken) {
             ServiceToken::updateOrCreate([
@@ -55,7 +43,7 @@ class SyncFacebookPages
                 'service' => 'facebook_page',
                 'service_id' => $pageToken['id'],
             ], [
-                'token' => $pageToken['access_token']
+                'token' => $pageToken['access_token'],
             ]);
         }
     }

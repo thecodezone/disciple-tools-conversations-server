@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\ChannelType;
+use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,12 +27,11 @@ class ChannelFactory extends Factory
 
     public function facebookPage(): ChannelFactory
     {
-        return $this->state(function (array $attributes) {
+        return $this->for(
+            Service::factory()->facebook()
+        )->state(function (array $attributes) {
             return [
-                'channel_type_id' => ChannelType::where('name', 'Facebook Page')->first()->id,
-                'settings' => json_encode([
-                    'facebook_page' => 1,
-                ]),
+                'channel_type_id' => ChannelType::FACEBOOK_PAGE
             ];
         });
     }

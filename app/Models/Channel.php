@@ -20,15 +20,13 @@ class Channel extends Model
         'settings' => 'array',
     ];
 
-    public function getConnectedAttribute() {
-        return $this->type->driver()->connected($this);
-    }
     public function service()
     {
         return $this->belongsTo(Service::class);
     }
 
-    public function instance() {
+    public function instance()
+    {
         return $this->hasManyThrough(Instance::class, Service::class, 'id', 'id', 'service_id', 'instance_id');
     }
 
@@ -37,7 +35,8 @@ class Channel extends Model
         return $this->belongsTo(ChannelType::class, 'channel_type_id');
     }
 
-    public function driver(): \App\Channels\Channel {
+    public function driver(): \App\Http\Webhooks\Driver
+    {
         return $this->type->driver();
     }
 }

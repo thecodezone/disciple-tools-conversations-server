@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Events\OAuthSuccess;
-use App\Listeners\SyncFacebookPages;
+use App\Models\Channel;
 use App\Models\Instance;
 use App\Models\Service;
+use App\Observers\ChannelObserver;
 use App\Observers\InstanceObserver;
 use App\Observers\ServiceObserver;
 use Illuminate\Auth\Events\Registered;
@@ -26,9 +26,8 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         SocialiteWasCalled::class => [
-            FacebookExtendSocialite::class.'@handle',
+            FacebookExtendSocialite::class . '@handle',
         ],
-
     ];
 
     /**
@@ -38,6 +37,7 @@ class EventServiceProvider extends ServiceProvider
     {
         Instance::observe(InstanceObserver::class);
         Service::observe(ServiceObserver::class);
+        Channel::observe(ChannelObserver::class);
     }
 
     /**

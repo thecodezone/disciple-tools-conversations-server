@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use App\Models\Instance;
 use App\Models\Service;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
@@ -35,8 +33,8 @@ class ServiceTest extends TestCase
                     'type',
                     'access_token',
                     'created_at',
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 
@@ -74,7 +72,8 @@ class ServiceTest extends TestCase
     /**
      * Test tht it can delete a service
      */
-    public function test_it_can_delete_a_service(): void {
+    public function test_it_can_delete_a_service(): void
+    {
         $user = User::factory()->admin()->create();
         $this->actingAs($user);
         $service = Service::factory()->create();
@@ -83,5 +82,4 @@ class ServiceTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('services', ['id' => $service->id]);
     }
-
 }

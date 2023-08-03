@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Instance;
+use App\Models\ServiceToken;
 use App\Models\ServiceType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,5 +24,12 @@ class ServiceFactory extends Factory
             'service_type_id' => ServiceType::inRandomOrder()->first()->id,
             'instance_id' => Instance::count() ? Instance::inRandomOrder()->first()->id : Instance::factory()->create()->id,
         ];
+    }
+
+    public function facebook()
+    {
+        return $this
+            ->for(ServiceType::find(ServiceType::FACEBOOK))
+            ->for(ServiceToken::factory());
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\Response;
 use App\Models\Instance;
 use App\Models\User;
 
@@ -21,7 +20,7 @@ class InstancePolicy
      */
     public function view(User $user, Instance $instance): bool
     {
-        if (!$user->instances->contains($instance)) {
+        if (! $user->instances->contains($instance)) {
             return false;
         }
         return $user->can('view Instance');
@@ -40,7 +39,7 @@ class InstancePolicy
      */
     public function update(User $user, Instance $instance): bool
     {
-        if (!$user->instances->contains($instance)) {
+        if (! $user->instances->contains($instance)) {
             return false;
         }
         return $user->can('update Instance');
@@ -51,7 +50,7 @@ class InstancePolicy
      */
     public function delete(User $user, Instance $instance): bool
     {
-        if (!$user->instances->contains($instance)) {
+        if (! $user->instances->contains($instance)) {
             return false;
         }
         return $user->can('delete Instance');
@@ -70,7 +69,7 @@ class InstancePolicy
      */
     public function forceDelete(User $user, Instance $instance): bool
     {
-        if (!$user->instances->contains($instance)) {
+        if (! $user->instances->contains($instance)) {
             return false;
         }
         return $user->can('force-delete Instance');

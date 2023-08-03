@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,10 +16,9 @@ return new class extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('service');
             $table->string('service_id');
-            $table->string('token');
+            $table->longText('token');
             $table->string('refresh_token')->nullable();
             $table->timestamp('expires_at')->nullable();
-            $table->unique(['user_id', 'service']);
             $table->timestamps();
         });
     }
