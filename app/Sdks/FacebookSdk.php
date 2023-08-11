@@ -42,7 +42,7 @@ class FacebookSdk
         'fields' => 'id,name,access_token',
     ]): array
     {
-        $result = Cache::remember('users', 60 * 60, function () use ($token, $query) {
+        $result = Cache::remember('facebook-accounts-' . $token['id'], 60 * 60, function () use ($token, $query) {
             return $this->get($token->token, $token->service_id . '/accounts', $query);
         });
 
@@ -66,6 +66,20 @@ class FacebookSdk
             ];
         }
         return $result;
+    }
+
+    public function getUser(ServiceToken $token, $id): array
+    {
+        $response = $this->client->get(
+            'v17.0/' . $id, [
+                'query' => [
+                    'access_token' => $token,
+                    'fields' => 'id,name,first_name,last_name,picture,email,phone,gender,link',
+                ],
+            ]
+        )->getBody()->getContents();
+
+        return json_decode($response, true);
     }
 
     public function sendWebhook(Instance $instance, MessageWebhook $webhook): array

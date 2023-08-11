@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,11 +16,6 @@ Route::middleware(['instance', 'auth:sanctum'])
     ->prefix('v1')
     ->name('api.')
     ->group(function () {
-
-        Route::resource('instances.services', \App\Http\Controllers\ServiceController::class)
-             ->only(['index', 'store', 'destroy']);
-
-        Route::get('webhook/mock', [\App\Http\Controllers\WebhookController::class, 'mock'])
-             ->name('webhook.mock');
-
+        Route::get('channels/{channel}/user', [\App\Http\Controllers\ChannelUserController::class, 'show'])
+            ->name('channel.user');
     });

@@ -1,0 +1,15 @@
+{
+    "id": "1234567890",
+    "name": "John Doe",
+    "first_name": "John",
+    "last_name": "Doe",
+    "picture": {
+        "url": "https://graph.facebook.com/1234567890/picture?width=200&height=200",
+        "height": 200,
+        "width": 200
+    },
+    "email": "johndoe@example.com",
+    "phone": "+1 212 555 1212",
+    "gender": "male",
+    "link": "https://www.facebook.com/johndoe"
+}

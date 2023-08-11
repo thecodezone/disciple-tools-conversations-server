@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Channel;
 use App\Models\Instance;
 use App\Models\ServiceToken;
 use App\Models\ServiceType;
@@ -28,8 +29,21 @@ class ServiceFactory extends Factory
 
     public function facebook()
     {
-        return $this
-            ->for(ServiceType::find(ServiceType::FACEBOOK))
-            ->for(ServiceToken::factory());
+        return $this->state(function (array $attributes) {
+            return [
+                'service_type_id' => ServiceType::find(ServiceType::FACEBOOK)->id,
+            ];
+        });
+    }
+
+    public function hasFacebookPageComments()
+    {
+        return $this->facebook()
+            ->for(
+                ServiceToken::factory()->create()
+            )
+            ->has(
+                Channel::factory()->facebookPageComments()->count(1)
+            );
     }
 }

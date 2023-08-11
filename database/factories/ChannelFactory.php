@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Models\ChannelType;
 use App\Models\Service;
+use App\Models\ServiceToken;
+use App\Models\ServiceType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -11,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ChannelFactory extends Factory
 {
+
     /**
      * Define the model's default state.
      *
@@ -20,19 +23,28 @@ class ChannelFactory extends Factory
     {
         return [
             'name' => $this->faker->words(3, true),
-            'channel_type_id' => ChannelType::inRandomOrder()->first()->id,
+            'channel_type_id' => ChannelType::inRandomOrder()->first()->name,
             'settings' => ''
         ];
     }
 
-    public function facebookPage(): ChannelFactory
+    public function forChannelType(string $channelTypeName): ChannelFactory
     {
-        return $this->for(
-            Service::factory()->facebook()
-        )->state(function (array $attributes) {
-            return [
-                'channel_type_id' => ChannelType::FACEBOOK_PAGE
-            ];
+        return $this->state(function (array $attributes) use ($channelTypeName) {
+            return array_merge($attributes, [
+                'channel_type_id' => ChannelType::where('name', $channelTypeName)->first()->name,
+            ]);
         });
     }
+
+    public function facebookPageMessages(): ChannelFactory
+    {
+        return $this->forChannelType('facebook-page-messages');
+    }
+
+    public function facebookPageComments(): ChannelFactory
+    {
+        return $this->forChannelType('facebook-page-comments');
+    }
+
 }

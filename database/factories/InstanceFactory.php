@@ -21,4 +21,12 @@ class InstanceFactory extends Factory
             'endpoint' => $this->faker->url,
         ];
     }
+
+    public function hasFacebookPageComments(): static
+    {
+        return $this->has(
+            \App\Models\Service::factory()
+                ->hasFacebookPageComments()
+        );
+    }
 }

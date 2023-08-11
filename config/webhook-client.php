@@ -7,7 +7,7 @@ return [
              * This package supports multiple webhook receiving endpoints. If you only have
              * one endpoint receiving webhooks, you can use 'default'.
              */
-            'name' => 'facebook-page-comment',
+            'name' => 'facebook-page-comments',
 
             /*
              * The label to display in the admin panel.
@@ -47,6 +47,11 @@ return [
              * be equal or extend Spatie\WebhookClient\Models\WebhookCall.
              */
             'webhook_model' => \Spatie\WebhookClient\Models\WebhookCall::class,
+
+            /*
+             * The class name of the channel repository used to fetch data from the service..
+             */
+            'repository' => \App\Repositories\FacebookRepository::class,
 
             /*
              * The class that is responsible for providing settings fields to the admin interface.

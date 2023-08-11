@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Collection\Collection;
 
 class Channel extends Model
 {
@@ -35,8 +36,13 @@ class Channel extends Model
         return $this->belongsTo(ChannelType::class, 'channel_type_id');
     }
 
-    public function driver(): \App\Http\Webhooks\Driver
+    public function channelType()
     {
-        return $this->type->driver();
+        return $this->type();
+    }
+
+    public function config(): Collection
+    {
+        return $this->type->config();
     }
 }

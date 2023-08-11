@@ -45,4 +45,16 @@ class UserFactory extends Factory
             $user->assignRole('admin');
         });
     }
+
+    public function hasInstance(): static
+    {
+        return $this->has(\App\Models\Instance::factory());
+    }
+
+    public function withFacebookPageComments(): static
+    {
+        return $this->has(
+            \App\Models\Instance::factory()->hasFacebookPageComments()
+        );
+    }
 }
